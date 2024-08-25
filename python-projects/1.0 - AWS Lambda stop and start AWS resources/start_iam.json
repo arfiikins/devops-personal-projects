@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "StartRDSInstances",
+      "Effect": "Allow",
+      "Action": "rds:StartInstances",
+      "Resource": "arn:aws:rds:*:*:instance/*"
+    },
+    {
+      "Sid": "CloudWatchEvents",
+      "Effect": "Allow",
+      "Action": "events:PutEvents",
+      "Resource": "arn:aws:events:*:*:event-bus/default"
+    },
+    {
+      "Sid": "DescribeRDSInstances",
+      "Effect": "Allow",
+      "Action": "rds:DescribeInstances",
+      "Resource": "*"
+    }
+  ]
+}
