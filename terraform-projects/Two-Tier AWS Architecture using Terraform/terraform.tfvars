@@ -1,0 +1,15 @@
+region = "us-west-1"
+project_name = "jana-2tArch-tf"
+vpc_cidr_block = "10.20.0.0/16"
+shift = "ANZ-Shift"
+availzone = ["us-west-1a","us-west-1c"]
+pubsubnets_cidr = ["10.20.0.0/24","10.20.1.0/24"]
+privsubnets_cidr = ["10.20.3.0/24","10.20.4.0/24"]
+all = "0.0.0.0/0"
+ubuntu_ami = "ami-0f66240e199159416"
+instance_type_ec2 = "t2.micro"
+volume_ec2 = 15
+volumet_instance = "gp3"
+engine_rds         = "mysql"
+enginev_rds = "5.7"
+instance_class_rds = "db.t3.micro"
