@@ -1,0 +1,16 @@
+region_aws = "us-west-1"
+project_name = "jana-SGW"
+key_name = "jana-SGW-kp"
+vpc_cidr_block = "10.20.0.0/16"
+shift = "ANZ-Shift"
+azone = ["us-west-1a","us-west-1c"]
+pubsubnet = "10.20.0.0/24"
+privsubnet = "10.20.1.0/24"
+anycidr = "0.0.0.0/0"
+mypublicip = "<my-ip>"
+ubuntu_ami = "ami-036cafe742923b3d9"
+sgw_ami = "ami-0a11c63b02d8e4846" # SGW BYOL
+kp_name = "JanA-kp-testing"
+sgw_instance_type = "c5.2xlarge"
+bh_instance_type = "t2.small"
+volume_type = "gp3"
