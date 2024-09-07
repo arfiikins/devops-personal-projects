@@ -44,12 +44,18 @@ resource "aws_route_table" "pub_rt_sgw" {                   # RTB
   route {
     cidr_block = var.anycidr
     gateway_id = aws_internet_gateway.igw_sgw.id
+
   }
 
   tags = {
     Name  = "${var.project_name}-rtb"
     Shift = var.shift
   }
+}
+
+resource "aws_route_table_association" "pubsub_rtb" {       # Pubsub -> IGW
+  subnet_id      = aws_subnet.pubsub_sgw.id
+  route_table_id = aws_route_table.pub_rt_sgw.id
 }
 
 resource "aws_security_group" "bastion_host" {              # SG for bastion host
@@ -95,42 +101,42 @@ resource "aws_security_group" "sgw" {                       # SG for Service Gat
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   ingress {
     description = "HTTPS"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   ingress {
     description = "WRS port"
     from_port   = 5274
     to_port     = 5274
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   ingress {
     description = "WRS port"
     from_port   = 5275
     to_port     = 5275
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   ingress {
     description = "FPS port"
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   ingress {
     description = "Zero Trust Secure Access Onprem port"
     from_port   = 8088
     to_port     = 8088
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.pubsub_sgw.cidr_block, aws_subnet.privsub_sgw.cidr_block]
+    cidr_blocks = [aws_vpc.vpc_sgw.cidr_block]
   }
   egress {
     description = "Connect outside"
@@ -146,11 +152,8 @@ resource "aws_security_group" "sgw" {                       # SG for Service Gat
   }
 }
 
-
-
-
 resource "aws_instance" "bastion_host_sgw" {                    # Bastion Host (Ubuntu Server)
-  ami                    = var.ubuntu_ami
+  ami                    = var.bastion_ami
   key_name               = var.kp_name
   subnet_id              = aws_subnet.pubsub_sgw.id
   vpc_security_group_ids = [aws_security_group.bastion_host.id]
